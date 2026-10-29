@@ -1,7 +1,11 @@
-﻿using AdvanceCombatDemo.WorldEngine;
+﻿using AdvanceCombatDemo.InputLogic;
+using AdvanceCombatDemo.WorldEngine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AdvanceCombatDemo
 {
@@ -24,6 +28,12 @@ namespace AdvanceCombatDemo
         public static SpriteFont Font { get; private set; }
 
         public static World World { get; private set; }
+
+        public static int FPS { get; private set; }
+
+        private static int frameCount;
+
+        private static TimeSpan elapsedTime;
 
         public Main()
         {
@@ -58,16 +68,51 @@ namespace AdvanceCombatDemo
 
         protected override void Update(GameTime gameTime)
         {
-            
+            elapsedTime += gameTime.ElapsedGameTime;
+            if (elapsedTime > TimeSpan.FromSeconds(1))
+            {
+                elapsedTime -= TimeSpan.FromSeconds(1);
+                FPS = frameCount;
+                frameCount = 0;
+            }
+
+            Input.Update(this);
+
+            World.Update();
+            Camera.Center = Point.Zero;
 
             base.Update(gameTime);
         }
+
+        private List<long> ticksHistory = new List<long>();
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
 
-            WorldRenderer.Render();
+            frameCount++;
+
+            WorldRenderer.Draw();
+
+            SpriteBatch.Begin();
+
+            long milliseconds = WorldRenderer.RenderStopwatch.ElapsedMilliseconds;
+            long currentTicks = WorldRenderer.RenderStopwatch.ElapsedTicks;
+
+            ticksHistory.Add(currentTicks);
+
+            if (ticksHistory.Count > 30)
+                ticksHistory.RemoveAt(0);
+
+            long ticks = (long)ticksHistory.Average();
+
+            string fps = $"FPS: {FPS} | Render Time: {milliseconds}ms, {ticks}ticks";
+            Vector2 fpsPosition = new Vector2(5, ScreenHeight - 18);
+
+            SpriteBatch.DrawString(Font, new string('█', fps.Length), fpsPosition, Color.Black);
+            SpriteBatch.DrawString(Font, fps, fpsPosition, Color.White);
+
+            SpriteBatch.End();
 
             base.Draw(gameTime);
         }

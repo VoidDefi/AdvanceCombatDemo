@@ -1,38 +1,34 @@
 ﻿using AdvanceCombatDemo.ContentLoaders;
 using AdvanceCombatDemo.DemoContent;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
 namespace AdvanceCombatDemo.WorldEngine
 {
     public static class WorldRenderer
     {
-        public static void Render()
-        {
-            Point charSize = new(8, 19);
+        public static Point CharSize => new(8, 19);
 
+        internal static Stopwatch RenderStopwatch;
+
+        public static void Draw()
+        {
             World world = Main.World;
 
             if (world == null) return;
 
             Point screenSize = Main.ScreenSize;
 
-            int width = screenSize.X / charSize.X;
-            int height = screenSize.Y / charSize.Y;
+            int width = Camera.ViewTilesWidth;
+            int height = Camera.ViewTilesHeight;
 
-            int offsetX = (int)((screenSize.X - width * charSize.X) / 2f);
-            int offsetY = (int)((screenSize.Y - height * charSize.Y) / 2f);
+            int offsetX = (int)((screenSize.X - width * CharSize.X) / 2f);
+            int offsetY = (int)((screenSize.Y - height * CharSize.Y) / 2f);
 
-            Point startPoint = Point.Zero;
+            Point startPoint = Camera.Position;
 
-            //RenderStopwatch = new Stopwatch();
-            //RenderStopwatch.Start();
+            RenderStopwatch = new Stopwatch();
+            RenderStopwatch.Start();
 
             Main.SpriteBatch.Begin();
 
@@ -45,7 +41,7 @@ namespace AdvanceCombatDemo.WorldEngine
                     if (Point.X < 0 || Point.X > world.Size) continue;
                     if (Point.Y < 0 || Point.Y > world.Size) continue;
 
-                    Vector2 drawPoint = new Vector2(i * charSize.X + offsetX, j * charSize.Y + offsetY);
+                    Vector2 drawPoint = new Vector2(i * CharSize.X + offsetX, j * CharSize.Y + offsetY);
 
                     Tile tile = world.Tiles[Point.X, Point.Y];
 
@@ -62,6 +58,8 @@ namespace AdvanceCombatDemo.WorldEngine
             }
 
             Main.SpriteBatch.End();
+
+            RenderStopwatch.Stop();
         }
     }
 }
