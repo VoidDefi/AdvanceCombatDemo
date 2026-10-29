@@ -1,6 +1,7 @@
 ﻿using AdvanceCombatDemo.DemoContent;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,8 @@ namespace AdvanceCombatDemo.ContentLoaders
         {
             Tiles = LoadContent<BaseTile>().ToArray();
 
+            TilesAndTypes = new();
+
             for (int i = 0; i < Tiles.Length; i++)
             {
                 BaseTile tile = Tiles[i];
@@ -29,10 +32,10 @@ namespace AdvanceCombatDemo.ContentLoaders
 
         public BaseTile GetBaseTile(int type)
         {
-            if (type < 0 || type >= Tiles.Length)
+            if (type <= 0 || type - 1 >= Tiles.Length)
                 return null;
 
-            return Tiles[type];
+            return Tiles[type - 1];
         }
 
         public int GetType<T>() where T : BaseTile

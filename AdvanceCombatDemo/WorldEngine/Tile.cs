@@ -8,9 +8,9 @@ namespace AdvanceCombatDemo.WorldEngine
 {
     public struct Tile
     {
-        public short type;
+        public int type;
 
-        public short contamination;
+        public int contamination;
 
         public Tile()
         {

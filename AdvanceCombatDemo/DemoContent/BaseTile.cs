@@ -15,7 +15,7 @@ namespace AdvanceCombatDemo.DemoContent
 
         public void Init(int type)
         {
-            if (Type > 0 && type > 0)
+            if (Type <= 0 && type > 0)
                 Type = type;
 
             Setup();

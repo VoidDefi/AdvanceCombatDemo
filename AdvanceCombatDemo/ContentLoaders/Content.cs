@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace AdvanceCombatDemo.ContentLoaders
 {
-    public class Content
+    public static class Content
     {
-        public TileLoader TileLoader { get; private set; }
+        public static TileLoader TileLoader { get; private set; }
 
-        public void Load()
+        public static void Load()
         {
             TileLoader = new();
             TileLoader.Load();

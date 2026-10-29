@@ -19,6 +19,8 @@ namespace AdvanceCombatDemo
 
         public static float Height => Graphics.PreferredBackBufferHeight;
 
+        public static Point ScreenSize => new Point((int)Width, (int)Height);
+
         public static SpriteFont Font { get; private set; }
 
         public static World World { get; private set; }
@@ -41,6 +43,7 @@ namespace AdvanceCombatDemo
 
         protected override void Initialize()
         {
+            ContentLoaders.Content.Load();
             World = new World(500);
 
             base.Initialize();
@@ -64,7 +67,7 @@ namespace AdvanceCombatDemo
         {
             GraphicsDevice.Clear(Color.Black);
 
-            // TODO: Add your drawing code here
+            WorldRenderer.Render();
 
             base.Draw(gameTime);
         }
