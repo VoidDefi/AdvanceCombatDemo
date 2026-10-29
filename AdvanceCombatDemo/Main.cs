@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AdvanceCombatDemo.WorldEngine;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -20,6 +21,8 @@ namespace AdvanceCombatDemo
 
         public static SpriteFont Font { get; private set; }
 
+        public static World World { get; private set; }
+
         public Main()
         {
             Graphics = new GraphicsDeviceManager(this);
@@ -38,7 +41,7 @@ namespace AdvanceCombatDemo
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            World = new World(500);
 
             base.Initialize();
         }
